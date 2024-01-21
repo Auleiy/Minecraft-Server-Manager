@@ -1,0 +1,103 @@
+﻿<Window x:Class="ServerManager.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ServerManager"
+        mc:Ignorable="d"
+        Title="Minecraft 服务器管理工具" Height="450" Width="800" Loaded="WindowLoad" Closing="WindowClose">
+    <Grid>
+        <TabControl>
+            <TabItem Header="开始">
+                <Grid>
+                    <Label Content="服务端名称：{ServerFile}" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" x:Name="ServerNameLabel"/>
+                    <Button Content="启动" HorizontalAlignment="Left" Margin="10,40,0,0" VerticalAlignment="Top" Padding="20,2,20,3" IsEnabled="False" x:Name="StartButton" Click="Start"/>
+                    <Button Content="停止" HorizontalAlignment="Left" Margin="81,40,0,0" VerticalAlignment="Top" Padding="20,2,20,3" IsEnabled="False" x:Name="StopButton" Click="Stop"/>
+                    <RichTextBox Margin="10,67,10,33" x:Name="ServerLogBox" FontFamily="MesloLGL Nerd Font" VerticalScrollBarVisibility="Visible" FontSize="10" IsReadOnly="True">
+                        <FlowDocument LineHeight="1"/>
+                    </RichTextBox>
+                    <TextBlock Margin="10,0,79,10" TextWrapping="Wrap" Padding="3,1,1,1"
+                               VerticalAlignment="Bottom" FontSize="10"
+                               FontFamily="MesloLGL Nerd Font" Foreground="#7E000000" x:Name="CommandPlaceholder">输入指令...</TextBlock>
+                    <TextBox Margin="10,0,79,10" TextWrapping="Wrap" 
+                             VerticalAlignment="Bottom" FontFamily="MesloLGL Nerd Font" 
+                             FontSize="10" Background="{x:Null}" TextChanged="UpdateCommandBox" x:Name="CommandBox" IsEnabled="False"/>
+                    <Button Content="发送" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" FontSize="10" Width="64"
+                            Height="18" x:Name="SendCommandButton" Click="SendCommand" IsEnabled="False"/>
+                    <Button Content="选择服务器文件" HorizontalAlignment="Left" Margin="152,40,0,0" VerticalAlignment="Top" Height="22" Width="93"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="配置">
+                <ScrollViewer>
+                    <Grid>
+                        <GroupBox Header="server.properties" Margin="0,0,0,-83">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="133*"/>
+                                    <RowDefinition Height="23*"/>
+                                </Grid.RowDefinitions>
+                                <Button Content="保存" VerticalAlignment="Top" Margin="10,350,10,0" Padding="4" Click="UpdateServerProperties"/>
+                                <TextBlock Text="文件位置" HorizontalAlignment="Left" Margin="10,11,0,0" VerticalAlignment="Top"/>
+                                <TextBox Margin="63,10,43,0" TextWrapping="Wrap" VerticalAlignment="Top" VerticalContentAlignment="Center" x:Name="ServerPropertiesFilePathBox"/>
+                                <Button Content="浏览" HorizontalAlignment="Right" Margin="0,9,10,0" VerticalAlignment="Top" Click="BrowseServerProperties"/>
+                                <CheckBox Content="允许玩家在生存模式下悬空超过5秒" HorizontalAlignment="Left" Margin="10,40,0,0" VerticalAlignment="Top" 
+                                          x:Name="AllowFlightControl"/>
+                                <TextBlock HorizontalAlignment="Left" Margin="222,40,0,0" TextWrapping="Wrap" Text="allow-flight" VerticalAlignment="Top" FontFamily="MesloLGL Nerd Font" FontSize="10"/>
+                                <CheckBox Content="允许玩家进入下界" HorizontalAlignment="Left" Margin="10,60,0,0" VerticalAlignment="Top"
+                                          x:Name="AllowNetherControl"/>
+                                <TextBlock HorizontalAlignment="Left" Margin="131,60,0,0" TextWrapping="Wrap" Text="allow-nether" VerticalAlignment="Top" FontFamily="MesloLGL Nerd Font" FontSize="10"/>
+                                <CheckBox Content="向所有在线OP发送所执行命令的输出" HorizontalAlignment="Left" Margin="10,80,0,0" VerticalAlignment="Top"
+                                          x:Name="BroadcastConsoleToOpsControl"/>
+                                <TextBlock HorizontalAlignment="Left" Margin="232,80,0,0" TextWrapping="Wrap" Text="broadcast-console-to-ops" VerticalAlignment="Top" FontFamily="MesloLGL Nerd Font" FontSize="10"/>
+                                <CheckBox Content="向所有在线OP发送通过RCON执行的命令的输出" HorizontalAlignment="Left" Margin="10,100,0,0" VerticalAlignment="Top"
+                                          x:Name="BroadcastRconToOpsControl"/>
+                                <TextBlock HorizontalAlignment="Left" Margin="291,100,0,0" TextWrapping="Wrap" Text="broadcast-rcon-to-ops" VerticalAlignment="Top" FontFamily="MesloLGL Nerd Font" FontSize="10"/>
+                                <CheckBox Content="调试模式（控制台输出更多内容）" HorizontalAlignment="Left" Margin="10,120,0,0" VerticalAlignment="Top"
+                                          x:Name="DebugControl"/>
+                                <TextBlock HorizontalAlignment="Left" Margin="208,120,0,0" TextWrapping="Wrap" Text="debug" VerticalAlignment="Top" FontFamily="MesloLGL Nerd Font" FontSize="10"/>
+                                <TextBlock Text="难度" HorizontalAlignment="Left" Margin="10,144,0,0" VerticalAlignment="Top"/>
+                                <TextBlock HorizontalAlignment="Left" Margin="39,144,0,0" TextWrapping="Wrap" Text="difficulty" VerticalAlignment="Top" FontFamily="MesloLGL Nerd Font" FontSize="10"/>
+                                <ComboBox Margin="109,141,10,0" VerticalAlignment="Top" SelectedIndex="1"
+                                          x:Name="DifficultyControl">
+                                    <ComboBoxItem Content="和平" x:Name="peaceful"/>
+                                    <ComboBoxItem Content="简单" x:Name="easy"/>
+                                    <ComboBoxItem Content="普通" x:Name="normal"/>
+                                    <ComboBoxItem Content="困难" x:Name="hard"/>
+                                </ComboBox>
+                                <CheckBox Content="启用命令方块" HorizontalAlignment="Left" Margin="10,167,0,0" VerticalAlignment="Top"
+                                          x:Name="EnableCommandBlockControl"/>
+                                <TextBlock HorizontalAlignment="Left" Margin="107,167,0,0" TextWrapping="Wrap" Text="enable-command-block" VerticalAlignment="Top" FontFamily="MesloLGL Nerd Font" FontSize="10"/>
+                                <CheckBox Content="暴露具有对象名MBean和属性averageTickTime和tickTimes" HorizontalAlignment="Left" Margin="10,188,0,0" VerticalAlignment="Top"
+                                          x:Name="EnableJmxMonitoringControl"/>
+                                <TextBlock HorizontalAlignment="Left" Margin="357,188,0,0" TextWrapping="Wrap" Text="enable-jmx-monitoring" VerticalAlignment="Top" FontFamily="MesloLGL Nerd Font" FontSize="10"/>
+                                <CheckBox Content="允许使用GameSpy4协议的服务器监听器" HorizontalAlignment="Left" Margin="10,208,0,0" VerticalAlignment="Top"
+                                          x:Name="EnableQueryControl"/>
+                                <TextBlock HorizontalAlignment="Left" Margin="253,208,0,0" TextWrapping="Wrap" Text="enable-query" VerticalAlignment="Top" FontFamily="MesloLGL Nerd Font" FontSize="10"/>
+                                <CheckBox Content="允许远程访问服务器控制台" HorizontalAlignment="Left" Margin="10,228,0,0" VerticalAlignment="Top"
+                                          x:Name="EnableRconControl"/>
+                                <TextBlock HorizontalAlignment="Left" Margin="179,228,0,0" TextWrapping="Wrap" Text="enable-rcon" VerticalAlignment="Top" FontFamily="MesloLGL Nerd Font" FontSize="10"/>
+                                <CheckBox Content="使服务器在服务器列表中看起来是“在线”的" HorizontalAlignment="Left" Margin="10,248,0,0" VerticalAlignment="Top"
+                                          x:Name="EnableStatusControl"/>
+                                <TextBlock HorizontalAlignment="Left" Margin="260,248,0,0" TextWrapping="Wrap" Text="enable-status" VerticalAlignment="Top" FontFamily="MesloLGL Nerd Font" FontSize="10"/>
+                                <CheckBox Content="要求玩家必须具有Mojang签名的公钥才能进入服务器" HorizontalAlignment="Left" Margin="10,268,0,0" VerticalAlignment="Top"
+                                    x:Name="EnforceSecureProfileControl"/>
+                                <TextBlock HorizontalAlignment="Left" Margin="319,268,0,0" TextWrapping="Wrap" Text="enforce-secure-profile" VerticalAlignment="Top" FontFamily="MesloLGL Nerd Font" FontSize="10"/>
+                                <CheckBox Content="在服务器上强制执行白名单" HorizontalAlignment="Left" Margin="10,288,0,0" VerticalAlignment="Top"
+                                    x:Name="EnforceWhitelistControl"/>
+                                <TextBlock HorizontalAlignment="Left" Margin="179,288,0,0" TextWrapping="Wrap" Text="enforce-whitelist" VerticalAlignment="Top" FontFamily="MesloLGL Nerd Font" FontSize="10"/>
+                                <TextBlock Text="实体发送数据包最远距离" HorizontalAlignment="Left" Margin="10,309,0,0" VerticalAlignment="Top"/>
+                                <TextBlock HorizontalAlignment="Left" Margin="147,309,0,0" TextWrapping="Wrap" Text="entity-broadcast-range-percentage" VerticalAlignment="Top" FontFamily="MesloLGL Nerd Font" FontSize="10"/>
+                                <TextBox HorizontalAlignment="Left" Margin="351,308,0,0" TextWrapping="Wrap" Text="100" VerticalAlignment="Top" Width="387"
+                                         x:Name="EntityBroadcastRangePercentageControl"/>
+                                <TextBlock Text="％" HorizontalAlignment="Left" Margin="743,309,0,0" VerticalAlignment="Top"/>
+                                <CheckBox Content="强制玩家加入时为默认游戏模式" HorizontalAlignment="Left" Margin="10,330,0,0" VerticalAlignment="Top"
+                                    x:Name="ForceGamemodeControl"/>
+                                <TextBlock HorizontalAlignment="Left" Margin="203,330,0,0" TextWrapping="Wrap" Text="force-gamemode" VerticalAlignment="Top" FontFamily="MesloLGL Nerd Font" FontSize="10"/>
+                            </Grid>
+                        </GroupBox>
+                    </Grid>
+                </ScrollViewer>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>
